@@ -1,166 +1,225 @@
+function l(what)
+{
+    console.log(what);
+}
+
+function a(what)
+{
+    alert(what);
+}
+
 let questions = [
     {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
+        enonce: 'En jQuery,quelle est la bonne manière de sélectionner un paragraphe avec une classe de "texte"',
         reponses : [
-            "Laurie",
-            "Amandine",
-            "Sophie",
-            "Anne-lise"
+            '$(<p>class="texte"</p>)',
+            "$('p#texte')",
+            "$('p.texte')",
+            "$(.texte > p)"
+        ],
+        rightAnswer: "$('p.texte')"
+    },
+    {
+        enonce: 'A quelle propriété CSS peut-on donner la valeur: "3px dotted royalblue"',
+        reponses : [
+            "Margin",
+            "Border",
+            "Padding",
+            "Pudding"
+        ],
+        rightAnswer: "Border"
+    },
+    {
+        enonce: "En JavaScript, un tableau peut contenir un tableau d'objets",
+        reponses : [
+            "Vrai",
+            "Faux",
+            "Peut-être?",
+        ],
+        rightAnswer: "Vrai"
+    },
+    {
+        enonce: "Comment se nomment les caractères qui suivent une instruction conditionnelle ?",
+        reponses : [
+            "Parenthèses",
+            "Moustaches",
+            "Pistaches",
+            "Accolades"
+        ],
+        rightAnswer: "Accolades"
+    },
+    {
+        enonce: "Peut-on associer du jQuery et du JavaScript dans un même fichier ?",
+        reponses : [
+            "Oui",
+            "Non",
+        ],
+        rightAnswer: "Oui"
+    },
+    {
+        enonce: "Quel attribut permet de cibler le chemin d'accès d'une image",
+        reponses : [
+            "source",
+            "path",
+            "src",
+            "type"
+        ],
+        rightAnswer: "src"
+    },
+    {
+        enonce: "L'utilisateur peut-il empêcher votre script JavaScript de s'éxécuter?",
+        reponses : [
+            "Oui",
+            "Non",
+            "Il peut toujours essayer",
+        ],
+        rightAnswer: "Oui"
+    },
+    {
+        enonce: "En jQuery, que cible $('.header-item > p')",
+        reponses : [
+            "Les paragraphes enfants d'un div de classe 'header-item'",
+            "Les paragraphes de classe 'header-item'",
+            "Les éléments de classe 'header-item' supérieurs aux éléments 'p'",
+            "Les éléments de classe 'header-item' inférieurs aux éléments 'p'"
+        ],
+        rightAnswer: "Les paragraphes enfants d'un div de classe .header-item"
+    },
+    {
+        enonce: "En jQuery, quelle méthode utiliser pour ajouter un nouvel enfant à un élément 'monElement' ?",
+        reponses : [
+            "monElement.append(enfant)",
+            "monElement.html(enfant)",
+            "monElement.add(enfant)",
+            "enfant.getParent(monElement)"
+        ],
+        rightAnswer: "monElement.append(enfant)"
+    },
+    {
+        enonce: "En JavaScript natif, peut-on obtenir le même résultat que la méthode jQuery .hide() ?",
+        reponses : [
+            "Oui",
+            "Non",
+            "Zbradaraldjan",
         ],
         rightAnswer: "Laurie"
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 3,
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 1
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 3,
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 1
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 3,
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 1
-    },
-    {
-        enonce: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellat, tempora?",
-        reponses : {
-            1: "Laurie",
-            2: "Amandine",
-            3: "Sophie",
-            4: "Anne-Lise"
-        },
-        rightAnswer: 3,
     },
 ];
 
 
 let Game = {
-
     currentQuestion : 0,
-    currentDisplayedQuestion : 1,
-    resultsArray : [
-        [], // Right Answers
-        {} // Wrong Answers
-    ],
+    resultsArray : [],
     isRunning : false,
+    userAnswered : false,
+    rightAnswers : 0,
+    wrongAnswers : 0,
 
     init: function()
     {
-
-        $.each(questions, function(index, value)
-        {
-            let div = $('<div></div>')
-                    .addClass('question-wrapper')
-                    .attr('id', 'question' + parseInt(Game.currentQuestion + 1)),
-
-                h1  = $('<h1></h1>').text('Question ' + parseInt(Game.currentQuestion + 1)),
-                flex = $('<div></div>').addClass('answers-wrapper'),
-                p   = $('<p></p>').text(value.enonce);
-
-            Game.currentQuestion++;
-
-            div.append(h1);
-            div.append(p);
-
-            $.each(value.reponses, function (index, value)
-            {
-                let rep =  $('<p></p>').text(value).addClass('answer');
-                flex.append(rep);
-            });
-
-            div.append(flex);
-
-            $('.wrapper').append(div);
-        });
-
-        $('.wrapper > div:not(#starting-block)').hide();
-
         $('#start').click(Game.start);
+        $('#score-wrapper').hide();
     },
 
     start: function()
     {
         $('#starting-block').hide();
-
-        Game.displayQuestion(Game.currentDisplayedQuestion);
-
+        Game.displayQuestion(Game.currentQuestion);
     },
 
     displayQuestion: function(id)
     {
-        let question = $('#question' + id);
+        let div = $('<div></div>')
+                .addClass('question-wrapper')
+                .attr('id', 'question' + parseInt(id));
 
-        question.show();
+        let h1  = $('<h1></h1>').text('Question ' + parseInt(id + 1)),
+            flex = $('<div></div>').addClass('answers-wrapper'),
+            p   = $('<p></p>').text(questions[id].enonce),
+            currentAnswer = 0;
+
+        div.append(h1);
+        div.append(p);
+
+        $.each(questions[Game.currentQuestion].reponses, function (index, value)
+        {
+            let rep =  $('<p></p>')
+                .text(value)
+                .addClass('answer')
+                .attr('id', 'answer' + currentAnswer );
+            flex.append(rep);
+            currentAnswer++;
+        });
+
+        div.append(flex);
+
+        currentAnswer = 0;
+
+        $('.wrapper').append(div);
 
         Game.handleInput();
     },
 
     handleInput: function()
     {
-        $('p.answer').click(function(e)
-        {
-            let userAnswer = $(this).text();
+        let answers = $('.answer');
 
-            if (userAnswer === questions[id - 1].rightAnswer)
-            {
-                Game.resultsArray[0].push(`${userAnswer} est une bonne réponse!`);
-            } else {
-                Game.resultsArray[1].push(
-                    {
-                        result: `Dommage! ${userAnswer} est une mauvaise réponse!`,
-                        rightAnswer : questions[id - 1].rightAnswer
-                    }
-                )
-            }
-        });
+        for (let i = 0; i < answers.length; i++)
+        {
+           $('#answer' + i).click(function()
+           {
+               if (!Game.userAnswered)
+               {
+                   Game.userAnswered = true;
+                   let userAnswer = $(this).text(),
+                       question = questions[Game.currentQuestion],
+                       rightAnswer = question.rightAnswer;
+
+
+                   if (userAnswer === rightAnswer)
+                   {
+                       Game.resultsArray.push(
+                           {
+                               result: `${userAnswer} est une bonne réponse!`,
+                           }
+                       );
+                   } else {
+                       Game.resultsArray.push(
+                           {
+                               result: `Dommage! ${userAnswer} est une mauvaise réponse`,
+                               rightAnswer: rightAnswer
+                           }
+                       );
+
+                       if (Game.resultsArray.length === 10)
+                       {
+                           Game.displayResults();
+                       }
+                   }
+
+                   Game.userAnswered = false;
+                   l(Game.resultsArray);
+
+               }
+
+               $('.question-wrapper').remove();
+
+               Game.currentQuestion++;
+
+               if (questions[Game.currentQuestion])
+               {
+                   Game.displayQuestion(Game.currentQuestion);
+               }
+           })
+        }
+    },
+
+    displayResults: function()
+    {
+
+
+
+        $('#score-wrapper').show();
     }
 };
 
