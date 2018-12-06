@@ -49,6 +49,7 @@
     align-items: center;
     color: white;
     font-size: 1.4rem;
+    cursor: pointer;
 }
 
 .question-wrapper .answers-wrapper .answer:nth-child(1), .question-wrapper .answers-wrapper .answer:nth-child(3) {
@@ -91,6 +92,10 @@
     padding: 1rem;
 }
 
+button:hover {
+    background: rgba(156, 48, 255, 0.75) !important;
+    cursor: pointer;
+}
 
 #score-wrapper h1 {
     color: blueviolet;
