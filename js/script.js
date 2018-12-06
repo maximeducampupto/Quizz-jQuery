@@ -1,13 +1,6 @@
-function l(what)
-{
-    console.log(what);
-}
-
-function a(what)
-{
-    alert(what);
-}
-
+/* * * * * * * * * * * * * * *
+ * Array of objects containing all the questions, answers and the correct answer
+ */
 let questions = [
     {
         enonce: 'En jQuery,quelle est la bonne manière de sélectionner un paragraphe avec une classe de "texte"',
@@ -107,13 +100,19 @@ let questions = [
     },
 ];
 
-
+/* * * * * * * * * * * * * * *
+ * Responsible for most of the app's logic
+ */
 let Game = {
     currentQuestion : 0,
     resultsArray : [],
     userAnswered : false,
     rightAnswers : 0,
 
+    /* * * * * * * * * * * * * * *
+    * When the start button is clicked, launches the game itself
+    * Starts the timer
+    */
     init: function()
     {
         $('#start').click(Game.start);
@@ -126,6 +125,12 @@ let Game = {
         $('#starting-block').hide();
         Game.displayQuestion(Game.currentQuestion);
     },
+
+    /* * * * * * * * * * * * * * *
+    * Using the id param, finds the question in the array of objects
+    * Then creates the markup and content before displaying the new element
+    * Calls for the listening of user input
+    */
 
     displayQuestion: function(id)
     {
@@ -169,6 +174,13 @@ let Game = {
         Game.handleInput();
     },
 
+
+    /* * * * * * * * * * * * * * *
+    * Responsible for storing and making the comparison between the user's answer and the correct one
+    * Removes the currently displayed question and calls for the next one to be displayed
+    *
+    * In case the user reached the last question, calls for the results to be displayed
+    */
     handleInput: function()
     {
         let answers = $('.answer');
@@ -221,6 +233,11 @@ let Game = {
         }
     },
 
+    /* * * * * * * * * * * * * * *
+    * Responsible for stopping the timer, displaying the number of correct answers out of 10
+    * and creating the markup and content for each questions to be displayed to the user as a recap
+    */
+
     displayResults: function()
     {
         Timer.stop();
@@ -262,6 +279,10 @@ let Game = {
 };
 
 
+/* * * * * * * * * * * * * * *
+* Responsible for starting and stopping a timer that will run
+* whilst the user is playing the quiz
+*/
 let Timer = {
 
     time: null,
@@ -274,7 +295,6 @@ let Timer = {
         {
             Timer.time++;
             Timer.start();
-            l(Timer.time);
         }, 1000)
     },
 
@@ -288,9 +308,6 @@ let Timer = {
     getEndTime: function() {
         let minutes = Math.floor(Timer.endTime / 60),
             seconds = Math.floor(Timer.endTime % 60);
-
-        // minutes =  minutes < 10 && minutes > 0 ? '0' + minutes : minutes;
-        // console.log(minutes);
 
        if (minutes > 0)
        {
