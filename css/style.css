@@ -34,7 +34,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 3px;
 }
 
 .question-wrapper .answers-wrapper {
@@ -155,7 +154,6 @@
 
     .answer {
         height: 30vh !important;
-        border-radius: 5px !important;
     }
 
     .question-wrapper .answers-wrapper p {
@@ -267,7 +265,6 @@
 
     .answer {
         height: 30vh !important;
-        border-radius: 5px !important;
     }
 
     .question-wrapper .answers-wrapper p {
