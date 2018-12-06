@@ -73,12 +73,12 @@ let questions = [
     {
         enonce: "En jQuery, que cible $('.header-item > p')",
         reponses : [
-            "Les paragraphes enfants d'un div de classe 'header-item'",
+            "Les paragraphes enfants d'un élement de classe 'header-item'",
             "Les paragraphes de classe 'header-item'",
             "Les éléments de classe 'header-item' supérieurs aux éléments 'p'",
             "Les éléments de classe 'header-item' inférieurs aux éléments 'p'"
         ],
-        rightAnswer: "Les paragraphes enfants d'un div de classe 'header-item'"
+        rightAnswer: "Les paragraphes enfants d'un élément de classe 'header-item'"
     },
     {
         enonce: "En jQuery, quelle méthode utiliser pour ajouter un nouvel enfant à un élément 'monElement' ?",
