@@ -36,7 +36,8 @@ let questions = [
             "Faux",
             "Peut-être?",
         ],
-        rightAnswer: "Vrai"
+        rightAnswer: "Vrai",
+        blue : true
     },
     {
         enonce: "Comment se nomment les caractères qui suivent une instruction conditionnelle ?",
@@ -73,7 +74,8 @@ let questions = [
             "Non",
             "Il peut toujours essayer",
         ],
-        rightAnswer: "Oui"
+        rightAnswer: "Oui",
+        blue : true
     },
     {
         enonce: "En jQuery, que cible $('.header-item > p')",
@@ -83,7 +85,7 @@ let questions = [
             "Les éléments de classe 'header-item' supérieurs aux éléments 'p'",
             "Les éléments de classe 'header-item' inférieurs aux éléments 'p'"
         ],
-        rightAnswer: "Les paragraphes enfants d'un div de classe .header-item"
+        rightAnswer: "Les paragraphes enfants d'un div de classe 'header-item'"
     },
     {
         enonce: "En jQuery, quelle méthode utiliser pour ajouter un nouvel enfant à un élément 'monElement' ?",
@@ -91,18 +93,17 @@ let questions = [
             "monElement.append(enfant)",
             "monElement.html(enfant)",
             "monElement.add(enfant)",
-            "enfant.getParent(monElement)"
         ],
-        rightAnswer: "monElement.append(enfant)"
+        rightAnswer: "monElement.append(enfant)",
+        blue: true
     },
     {
         enonce: "En JavaScript natif, peut-on obtenir le même résultat que la méthode jQuery .hide() ?",
         reponses : [
             "Oui",
             "Non",
-            "Zbradaraldjan",
         ],
-        rightAnswer: "Laurie"
+        rightAnswer: "Oui"
     },
 ];
 
@@ -110,14 +111,13 @@ let questions = [
 let Game = {
     currentQuestion : 0,
     resultsArray : [],
-    isRunning : false,
     userAnswered : false,
     rightAnswers : 0,
-    wrongAnswers : 0,
 
     init: function()
     {
         $('#start').click(Game.start);
+        Timer.start();
         $('#score-wrapper').hide();
     },
 
@@ -147,7 +147,9 @@ let Game = {
                 .text(value)
                 .addClass('answer')
                 .attr('id', 'answer' + currentAnswer );
+
             flex.append(rep);
+
             currentAnswer++;
         });
 
@@ -155,8 +157,15 @@ let Game = {
 
         currentAnswer = 0;
 
+        div.hide();
         $('.wrapper').append(div);
 
+        if (questions[id].hasOwnProperty('blue'))
+        {
+            $('.answers-wrapper p:nth-child(3)').attr('style', 'background-color : rgba(0, 0, 123, 0.4) !important;');
+        }
+
+        div.show(200);
         Game.handleInput();
     },
 
@@ -180,29 +189,27 @@ let Game = {
                    {
                        Game.resultsArray.push(
                            {
-                               result: `${userAnswer} est une bonne réponse!`,
+                               result: `Vous avez répondu: ${userAnswer}`,
                            }
                        );
+                       Game.rightAnswers++;
                    } else {
                        Game.resultsArray.push(
                            {
-                               result: `Dommage! ${userAnswer} est une mauvaise réponse`,
+                               result: `Dommage! Vous avez répondu: ${userAnswer}`,
                                rightAnswer: rightAnswer
                            }
                        );
-
-                       if (Game.resultsArray.length === 10)
-                       {
-                           Game.displayResults();
-                       }
                    }
-
-                   Game.userAnswered = false;
-                   l(Game.resultsArray);
-
+                   if (Game.resultsArray.length === 10)
+                   {
+                       Game.displayResults();
+                   }
                }
 
                $('.question-wrapper').remove();
+
+               Game.userAnswered = false;
 
                Game.currentQuestion++;
 
@@ -216,11 +223,84 @@ let Game = {
 
     displayResults: function()
     {
+        Timer.stop();
+
+        let score = $('<p></p>').text(`${Game.rightAnswers} / 10 bonnes réponses trouvées en ${Timer.getEndTime()}`),
+            wrapper = $('#score-wrapper');
+
+        score.attr('id', 'scoreDisplay');
+        wrapper.append(score);
+
+        Game.resultsArray.forEach(function (item, index) {
+
+            let div = $('<div></div>').addClass('result-wrapper'),
+                h2  = $('<h2></h2>').text(`Question ${parseInt(index + 1)}:`),
+                question = $('<p></p>').text(questions[index].enonce),
+                p   = $('<p></p>').text(item.result);
 
 
+            div.append(h2).append(question).append(p);
 
-        $('#score-wrapper').show();
+            if (item.hasOwnProperty('rightAnswer'))
+            {
+                let p2 = $('<p></p>').html(`La bonne réponse était: ${item.rightAnswer}`);
+                div.append(p2);
+                div.addClass('wrongAnswer');
+            } else {
+                let p2 = $('<p></p>').html(`Bonne réponse!`);
+                div.append(p2);
+                div.addClass('rightAnswer');
+            }
+
+            wrapper.append(div);
+
+        });
+
+
+        wrapper.show();
     }
 };
+
+
+let Timer = {
+
+    time: null,
+    timeOut: null,
+    endTime: null,
+
+    start: function()
+    {
+        Timer.timeOut = setTimeout(function()
+        {
+            Timer.time++;
+            Timer.start();
+            l(Timer.time);
+        }, 1000)
+    },
+
+    stop: function()
+    {
+        clearTimeout(Timer.timeOut);
+        Timer.endTime = Timer.time;
+        Timer.time = null;
+    },
+
+    getEndTime: function() {
+        let minutes = Math.floor(Timer.endTime / 60),
+            seconds = Math.floor(Timer.endTime % 60);
+
+        // minutes =  minutes < 10 && minutes > 0 ? '0' + minutes : minutes;
+        // console.log(minutes);
+
+       if (minutes > 0)
+       {
+           return `${minutes} min et ${seconds} secs`;
+       } else {
+           return `${seconds} secs`;
+       }
+    }
+};
+
+
 
 Game.init();
